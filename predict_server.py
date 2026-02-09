@@ -71,13 +71,17 @@
 #     port = int(os.environ.get("PORT", 8000))
 #     uvicorn.run(app, host="0.0.0.0", port=port)
 
+import os
+
+# 🔴 IMPORTANT: Disable legacy Keras BEFORE importing TensorFlow
+os.environ["TF_USE_LEGACY_KERAS"] = "0"
+
 from fastapi import FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 import numpy as np
 from PIL import Image
 import tensorflow as tf
 import io
-import os
 
 app = FastAPI()
 
@@ -89,6 +93,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# 📦 Load model using cloud-safe path
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODEL_PATH = os.path.join(BASE_DIR, "model_new", "best_waste_model.h5")
 
